@@ -48,7 +48,7 @@ check_latest_version(){
 					/tmp/upx-${upx_latest_ver}-${Arch_upx}_linux/upx $upxflag $binpath -o /tmp/AdGuardHomeupdate/AdGuardHome/${binpath##*/} > /dev/null 2>&1
 					echo -e "\n压缩后的核心大小: $(awk 'BEGIN{printf "%.2fMB\n",'$((`ls -l $downloadbin | awk '{print $5}'`))'/1000000}')"
 					echo -e "\n停止 AdGuardHome 服务..."
-					/etc/init.d/AdGuardHome stop
+					/etc/init.d/AdGuardHome stop nobackup
 					[ -f $binpath ] && rm -f $binpath
 					mv -f /tmp/AdGuardHomeupdate/AdGuardHome/${binpath##*/} $binpath
 					echo -e "\n重启 AdGuardHome 服务..."
@@ -118,7 +118,7 @@ doupdate_core(){
 		echo -e "\n压缩后的核心大小: $(awk 'BEGIN{printf "%.2fMB\n",'$((`ls -l $downloadbin | awk '{print $5}'`))'/1000000}')"
 	fi
 	echo -e "\n关闭 AdGuardHome 服务..." 
-	/etc/init.d/AdGuardHome stop
+	/etc/init.d/AdGuardHome stop nobackup
 	[ -f $binpath ] && rm -f $binpath
 	echo -e "\n移动核心文件到 ${binpath%/*} ..."
 	mv -f $downloadbin $binpath > /dev/null 2>&1
@@ -131,7 +131,7 @@ doupdate_core(){
 	rm -f /tmp/upx*.tar.xz
 	rm -rf /tmp/upx*	
 	rm -rf /tmp/AdGuardHomeupdate
-	/etc/init.d/AdGuardHome restart
+	/etc/init.d/AdGuardHome start
 	echo -e "\nAdGuardHome 核心更新成功!" 
 	EXIT 0
 }
